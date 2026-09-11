@@ -234,14 +234,4 @@ freighttiger-cost-watch/
 
 ---
 
-## Known Limitations
 
-- Thresholds tuned on 7 routes and 10 notes — a larger dataset may require recalibration
-- Date window is a heuristic offset, not parsed from note prose
-- Eval harness covers 4 labeled cases; not exhaustive across the full anomaly space
-
----
-
-<div align="center">
-<sub>Built end-to-end as a take-home assignment · decisions.md documents every design judgment call</sub>
-</div>
