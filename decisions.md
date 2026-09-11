@@ -19,3 +19,7 @@
 ## Section 4 Correction
 - What: GROQ_MODEL was initially set to groq/compound during setup, which is an agentic model that leaked chain-of-thought reasoning into one output row. Switched to allam-2-7b, a plain instruction-tuned model with no metered cost on this tier, and corrected the cost estimate constants in explanation.py from Llama 3.1 8B pricing to $0.00 to match the model actually used.
 - Why: compound is designed for multi-step tool orchestration, not single-sentence extraction, and produced unpredictable reasoning preambles. allam-2-7b behaved deterministically across all 14 rows with zero cost, which is a better fit for a task that only needs one grounded sentence.
+
+## Section 5: Output Formatting + Reproducibility Check
+- What: Reshaped internal pipeline columns into the exact sample_output_format_v2.csv contract, then ran the entire pipeline three full times end-to-end and diffed every graded column except free-text reason across all three runs.
+- Why: The brief grades reproducibility on flags and numbers, explicitly allowing explanation wording to vary, so the diff excludes reason by design rather than by oversight. Running the actual pipeline as subprocesses three times is a stronger proof than reasoning about determinism from the code alone.

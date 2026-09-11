@@ -34,10 +34,16 @@ class GroqProvider(LLMProvider):
             "max_tokens": 120,
             "messages": [{"role": "user", "content": prompt}]
         }
-        try:
+        for attempt in range(5):
             resp = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=payload)
-            if resp.status_code != 200:
-                raise RuntimeError(f"Request failed with status {resp.status_code}: {resp.text}")
+            if resp.status_code == 429 and attempt < 4:
+                import time
+                time.sleep(2.5)
+                continue
+            break
+        if resp.status_code != 200:
+            raise RuntimeError(f"Request failed with status {resp.status_code}: {resp.text}")
+        try:
             data = resp.json()
             return {
                 "text": data["choices"][0]["message"]["content"].strip(),
