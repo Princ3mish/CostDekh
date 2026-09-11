@@ -1,0 +1,15 @@
+route,week_of,input_tokens,output_tokens
+Ahmedabad-Mumbai,2025-01-20,1401,420
+Chennai-Bangalore,2025-02-24,1457,538
+Chennai-Bangalore,2025-03-03,1457,510
+Chennai-Bangalore,2025-03-10,1464,474
+Chennai-Bangalore,2025-03-17,1462,394
+Mumbai-Pune,2025-09-15,1420,421
+Mumbai-Pune,2025-09-22,1419,302
+Mumbai-Pune,2025-10-06,1427,369
+Mumbai-Pune,2025-10-13,1426,429
+Mumbai-Pune,2025-10-20,1430,522
+Mumbai-Pune,2025-10-27,1427,377
+Mumbai-Pune,2025-11-03,1438,411
+Mumbai-Pune,2025-11-10,1430,379
+Mumbai-Pune,2025-11-17,1430,616
