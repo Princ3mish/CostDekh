@@ -40,7 +40,12 @@
 - What: Built a read-only FastAPI layer over the pipeline's own output files (no recomputation on request) with two endpoints, and a single-page React dashboard with a sortable table, an expandable evidence panel per row, and a per-route cost trend chart.
 - Why: Keeping the API strictly read-only over precomputed output means the API can never disagree with the graded CSV — there's one source of truth, not two systems that could drift apart. The expandable evidence panel exists specifically so a reviewer can check the "no hallucination" claim visually against the actual matched note, rather than trusting the reason text on faith.
 
+## Section 8: README and Final Documentation
+- What: Wrote the top-level README covering architecture, run instructions, key design decisions, reproducibility, cost, and known limitations, sourced entirely from decisions.md and real output files rather than restated estimates.
+- Why: The brief evaluates "can you explain your work" partly from the README alone before any live walkthrough, so it needed to stand on its own as a complete account rather than a summary that assumes the reader has decisions.md open too.
+
 ## Section 8 Addendum: NVIDIA NIM Model Selection
+
 - What: Tested every apparent text-instruct model available on the NVIDIA NIM key (meta/llama-3.1-8b-instruct, nvidia/llama-3.1-nemotron-nano-8b-v1, mistral-7b, granite-3.0-8b, nemotron-51b/70b, gemma-3-4b-it, poolside/laguna-xs-2.1) and found each was either 410 end-of-life, 404 inaccessible on this key, or 503 unavailable. meta/llama-3.2-11b-vision-instruct was the only model that returned 200 and handled the plain-text explanation prompt correctly.
 - Why: A vision-labeled model is not the ideal fit on paper, but empirical verification matters more than a clean-sounding name — this was tested directly against the actual explanation prompt, not just a "say hello" check, before being accepted as the fallback model.
 
