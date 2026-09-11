@@ -89,6 +89,36 @@ backend/pipeline/
 
 ---
 
+## Screenshots
+
+### Dashboard Overview
+
+![Dashboard Overview](docs/screenshots/01-dashboard-overview.png)
+
+The full flagged-routes table, with unexplained (red) and justified (green) verdicts visually distinguished.
+
+### Evidence Panel — Justified
+
+![Evidence Panel — Justified](docs/screenshots/02-expanded-justified.png)
+
+Expanding a justified row shows the matched note text, date, and grounded explanation alongside the route's cost trend.
+
+### Evidence Panel — Unexplained
+
+![Evidence Panel — Unexplained](docs/screenshots/03-expanded-unexplained.png)
+
+Expanding an unexplained row shows the closest available note was checked and correctly rejected, rather than silently ignored.
+
+### Ask About a Route (Stretch Goal)
+
+![Ask About a Route - Grounded Answer](docs/screenshots/04-qa-grounded-answer.png)
+
+![Ask About a Route - No Match](docs/screenshots/05-qa-no-match.png)
+
+The Q&A feature answers grounded questions from already-verified data, and gives a clear no-match response for unrecognized routes rather than guessing.
+
+---
+
 ## Quickstart
 
 ```bash
