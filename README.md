@@ -85,6 +85,8 @@ backend/pipeline/
                         →  output/final_flagged_routes.csv  (hand-in artifact)
 ```
 
+- `backend/qa.py` + `POST /api/ask`: answers plain-English questions about a specific route by filtering already-computed output and phrasing one grounded LLM response — the stretch-goal Q&A feature.
+
 ---
 
 ## Quickstart
@@ -106,9 +108,11 @@ python backend/pipeline/notes_retrieval.py
 python backend/pipeline/explanation.py
 python backend/pipeline/finalize.py
 
-# 4. Start the API + dashboard
-python backend/api.py               # → http://localhost:8000
-cd frontend && npm install && npm run dev   # → http://localhost:5173
+# 4. Start the backend:
+python backend/api.py  # (this occupies the terminal — leave it running)
+
+# In a new, separate terminal, start the frontend:
+cd frontend && npm install && npm run dev  # → http://localhost:5173
 ```
 
 ---
@@ -173,7 +177,8 @@ EVAL PASSED
 ```
 freighttiger-cost-watch/
 ├── backend/
-│   ├── api.py                     FastAPI app (2 endpoints, read-only)
+│   ├── api.py                     FastAPI app (3 endpoints, read-only + Q&A)
+│   ├── qa.py                      Route extraction, dataframe filtering, prompt building
 │   └── pipeline/
 │       ├── ingest.py
 │       ├── aggregate.py
