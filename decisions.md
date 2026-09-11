@@ -27,3 +27,8 @@
 ## Section 5: Output Formatting + Reproducibility Check
 - What: Reshaped internal pipeline columns into the exact sample_output_format_v2.csv contract, then ran the entire pipeline three full times end-to-end and diffed every graded column except free-text reason across all three runs.
 - Why: The brief grades reproducibility on flags and numbers, explicitly allowing explanation wording to vary, so the diff excludes reason by design rather than by oversight. Running the actual pipeline as subprocesses three times is a stronger proof than reasoning about determinism from the code alone.
+
+## Section 6: Eval Harness
+- What: Built two independent checks — four hand-verified labeled cases covering all four verdict scenarios (peer-window justified, multi-week flood justified, closest-note rejected, no note at all), and a full-dataset negation safety scan that re-reads raw note text for every matched_note_id in the final output and confirms none of them are negated notes.
+- Why: The labeled cases prove correctness on scenarios already validated by hand during earlier sections, now automated instead of relying on memory. The negation scan checks the entire output, not a sample, and is independent of the pipeline's own filtering logic since it re-derives negation from raw text rather than trusting the is_negated flag computed earlier — this is what lets us honestly say the system was checked, not just built.
+
