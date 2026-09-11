@@ -1,7 +1,13 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 import pandas as pd
 import uvicorn
+import sys
+import os
+sys.path.insert(0, os.path.dirname(__file__))
+from pipeline.llm_provider import FallbackProvider, GroqProvider, NvidiaNimProvider
+from qa import *
 
 app = FastAPI()
 
@@ -14,6 +20,7 @@ app.add_middleware(
 )
 
 flagged_df = pd.read_csv("output/final_flagged_routes.csv", keep_default_na=False)
+qa_provider = FallbackProvider([GroqProvider(), NvidiaNimProvider()])
 notes_df = pd.read_csv("data/context_notes.csv", keep_default_na=False)
 history_df = pd.read_csv("output/weekly_aggregates.csv")
 
@@ -41,6 +48,15 @@ def get_flagged_routes():
 def get_route_history(route: str):
     filtered = history_df[history_df["route"] == route].sort_values("week_of", ascending=True)
     return filtered[["week_of", "cost_per_tonne_km"]].to_dict(orient="records")
+
+
+class AskRequest(BaseModel):
+    question: str
+
+
+@app.post("/api/ask")
+def ask(body: AskRequest):
+    return answer_question(body.question, flagged_df, qa_provider)
 
 
 if __name__ == "__main__":

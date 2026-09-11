@@ -195,3 +195,76 @@ body {
   padding: 24px 0;
   text-align: center;
 }
+
+.qa-section {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+}
+
+.qa-heading {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.qa-row {
+  display: flex;
+  gap: 8px;
+}
+
+.qa-input {
+  flex: 1;
+  font-family: inherit;
+  font-size: 14px;
+  color: #1e293b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 8px 12px;
+  outline: none;
+}
+
+.qa-input:focus {
+  border-color: #10b981;
+  background: #ffffff;
+}
+
+.qa-button {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  background: #0f766e;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 18px;
+  cursor: pointer;
+}
+
+.qa-button:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.qa-answer {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.qa-answer-grounded {
+  color: #1e293b;
+}
+
+.qa-answer-muted {
+  color: #64748b;
+  font-style: italic;
+}
+

@@ -15,6 +15,10 @@ function App() {
   const [expandedIndex, setExpandedIndex] = useState(null);
   const [historyCache, setHistoryCache] = useState({});
   const [loadingHistory, setLoadingHistory] = useState(false);
+  const [qaQuestion, setQaQuestion] = useState("");
+  const [qaAnswer, setQaAnswer] = useState(null);
+  const [qaLoading, setQaLoading] = useState(false);
+  const [qaMatchCount, setQaMatchCount] = useState(null);
 
   useEffect(() => {
     fetch("http://localhost:8000/api/flagged-routes")
@@ -47,12 +51,57 @@ function App() {
     }
   };
 
+  const handleAsk = () => {
+    if (!qaQuestion.trim()) return;
+    setQaLoading(true);
+    setQaAnswer(null);
+    setQaMatchCount(null);
+    fetch("http://localhost:8000/api/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question: qaQuestion }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setQaAnswer(data.answer);
+        setQaMatchCount(data.matched_row_count);
+        setQaLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error calling /api/ask:", err);
+        setQaLoading(false);
+      });
+  };
+
   return (
     <div className="container">
       <header className="header">
         <h1>Freight Cost Watch Dashboard</h1>
         <p className="subtitle">Weekly cost-per-tonne-km anomalies, context evidence & route trend analysis</p>
       </header>
+
+      <div className="qa-section">
+        <h3 className="qa-heading">Ask about a route</h3>
+        <div className="qa-row">
+          <input
+            className="qa-input"
+            type="text"
+            value={qaQuestion}
+            onChange={(e) => setQaQuestion(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleAsk()}
+            placeholder="e.g. why did Ahmedabad Mumbai get pricier in January 2025"
+          />
+          <button className="qa-button" onClick={handleAsk} disabled={qaLoading}>
+            {qaLoading ? "Thinking..." : "Ask"}
+          </button>
+        </div>
+        {qaLoading && <p className="qa-answer qa-answer-muted">Thinking...</p>}
+        {!qaLoading && qaAnswer !== null && (
+          <p className={`qa-answer ${qaMatchCount === 0 ? "qa-answer-muted" : "qa-answer-grounded"}`}>
+            {qaAnswer}
+          </p>
+        )}
+      </div>
 
       <div className="table-wrapper">
         <table className="flagged-table">
