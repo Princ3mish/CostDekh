@@ -62,7 +62,7 @@ During the full pipeline execution on the dataset:
 - **Total Input Tokens**: 2,188
 - **Total Output Tokens**: 1,185
 - **Estimated Total Cost**: $0.00 (served on free tier)
-- **Fallback Verification**: Tested and confirmed with NVIDIA NIM (`meta/llama-3.2-11b-vision-instruct`) by temporarily simulating primary provider failure.
+- **Fallback Verification**: Tested and confirmed with NVIDIA NIM (`meta/llama-3.2-11b-vision-instruct` — the only model returning HTTP 200 on this API key after both `meta/llama-3.1-8b-instruct` and `nvidia/llama-3.1-nemotron-nano-8b-v1` returned 410 end-of-life) by temporarily simulating primary provider failure.
 
 ## Known Limitations
 - **Small Dataset Baseline**: The anomaly threshold and retrieval window were calibrated against a dataset of 7 routes and 10 notes.
