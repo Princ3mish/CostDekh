@@ -20,6 +20,10 @@
 - What: GROQ_MODEL was initially set to groq/compound during setup, which is an agentic model that leaked chain-of-thought reasoning into one output row. Switched to allam-2-7b, a plain instruction-tuned model with no metered cost on this tier, and corrected the cost estimate constants in explanation.py from Llama 3.1 8B pricing to $0.00 to match the model actually used.
 - Why: compound is designed for multi-step tool orchestration, not single-sentence extraction, and produced unpredictable reasoning preambles. allam-2-7b behaved deterministically across all 14 rows with zero cost, which is a better fit for a task that only needs one grounded sentence.
 
+## Section 5 Addendum: Rate Limit Retry
+- What: Added retry-with-backoff (up to 5 attempts, 2.5s wait) in GroqProvider.generate for HTTP 429 responses, discovered when running the pipeline three consecutive times for the reproducibility check. Also corrected the fallback default model string to match the model actually in use (allam-2-7b instead of the deprecated llama-3.1-8b-instant).
+- Why: Three full pipeline runs in quick succession is exactly the pattern that triggers Groq's free-tier rate limit, and failing outright there would make the reproducibility check itself unreliable rather than the pipeline. The retry only delays and re-sends the identical request — it does not change what gets sent or how the response is parsed, so it does not affect determinism.
+
 ## Section 4.5: Fallback LLM Provider
 - What: Added a FallbackProvider that tries Groq first and falls back to NVIDIA NIM only if Groq's call raises an error, with both providers self-reporting their name so the usage log records which one actually served each call.
 - Why: A single-provider pipeline has one point of failure if that provider has an outage or rate-limits mid-run; a same-shape OpenAI-compatible fallback costs one small class and keeps verdict logic completely unchanged, since the LLM is only ever used for phrasing, never for the decision itself. Verified by temporarily disabling the Groq key and confirming NVIDIA NIM served the calls without any other behavior change.

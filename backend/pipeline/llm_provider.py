@@ -21,7 +21,7 @@ class GroqProvider(LLMProvider):
 
     def __init__(self):
         self.api_key = os.environ.get("GROQ_API_KEY")
-        self.model = os.environ.get("GROQ_MODEL", "llama-3.1-8b-instant")
+        self.model = os.environ.get("GROQ_MODEL", "allam-2-7b")
 
     def generate(self, prompt: str) -> dict:
         if not self.api_key:
@@ -64,7 +64,7 @@ class NvidiaNimProvider(LLMProvider):
 
     def __init__(self):
         self.api_key = os.environ.get("NVIDIA_API_KEY")
-        self.model = os.environ.get("NVIDIA_NIM_MODEL", "meta/llama-3.1-8b-instruct")
+        self.model = os.environ.get("NVIDIA_NIM_MODEL", "meta/llama-3.2-11b-vision-instruct")
 
     def generate(self, prompt: str) -> dict:
         if not self.api_key:
