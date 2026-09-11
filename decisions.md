@@ -32,3 +32,8 @@
 - What: Built two independent checks — four hand-verified labeled cases covering all four verdict scenarios (peer-window justified, multi-week flood justified, closest-note rejected, no note at all), and a full-dataset negation safety scan that re-reads raw note text for every matched_note_id in the final output and confirms none of them are negated notes.
 - Why: The labeled cases prove correctness on scenarios already validated by hand during earlier sections, now automated instead of relying on memory. The negation scan checks the entire output, not a sample, and is independent of the pipeline's own filtering logic since it re-derives negation from raw text rather than trusting the is_negated flag computed earlier — this is what lets us honestly say the system was checked, not just built.
 
+## Section 7: FastAPI Backend + React Dashboard
+- What: Built a read-only FastAPI layer over the pipeline's own output files (no recomputation on request) with two endpoints, and a single-page React dashboard with a sortable table, an expandable evidence panel per row, and a per-route cost trend chart.
+- Why: Keeping the API strictly read-only over precomputed output means the API can never disagree with the graded CSV — there's one source of truth, not two systems that could drift apart. The expandable evidence panel exists specifically so a reviewer can check the "no hallucination" claim visually against the actual matched note, rather than trusting the reason text on faith.
+
+
