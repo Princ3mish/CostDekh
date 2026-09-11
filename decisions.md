@@ -15,3 +15,7 @@
 ## Section 4: LLM Explanation Layer
 - What: Built a provider-agnostic LLMProvider interface with a GroqProvider implementation (llama-3.1-8b-instant, temperature 0), and restricted every LLM call to a strict single-note prompt so the model only phrases an explanation, never decides the verdict. Skipped the LLM entirely for the "no candidate note at all" case since there is nothing to ground an explanation in.
 - Why: Keeping verdict logic in code and giving the LLM only phrasing duties makes the pipeline reproducible across runs (grading requires identical flags/numbers, only wording may vary) and removes the LLM's ability to hallucinate a verdict. Skipping the call when there's no note to reference is both cheaper and safer than letting a model guess.
+
+## Section 4 Correction
+- What: GROQ_MODEL was initially set to groq/compound during setup, which is an agentic model that leaked chain-of-thought reasoning into one output row. Switched to allam-2-7b, a plain instruction-tuned model with no metered cost on this tier, and corrected the cost estimate constants in explanation.py from Llama 3.1 8B pricing to $0.00 to match the model actually used.
+- Why: compound is designed for multi-step tool orchestration, not single-sentence extraction, and produced unpredictable reasoning preambles. allam-2-7b behaved deterministically across all 14 rows with zero cost, which is a better fit for a task that only needs one grounded sentence.

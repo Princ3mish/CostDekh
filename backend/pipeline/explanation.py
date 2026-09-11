@@ -94,8 +94,8 @@ if __name__ == '__main__':
     total_input = int(usage_df['input_tokens'].sum()) if not usage_df.empty else 0
     total_output = int(usage_df['output_tokens'].sum()) if not usage_df.empty else 0
     llm_calls = len(usage_df)
-    est_cost = (total_input / 1_000_000 * 0.05) + (total_output / 1_000_000 * 0.08)
+    est_cost = (total_input / 1_000_000 * 0.00) + (total_output / 1_000_000 * 0.00)
     print(f"Total input tokens: {total_input}")
     print(f"Total output tokens: {total_output}")
     print(f"Number of LLM calls: {llm_calls}")
-    print(f"Estimated cost: ${est_cost:.6f}")
+    print(f"Estimated cost (ALLaM-2-7B free tier, $0/1M tokens): ${est_cost:.6f}")
