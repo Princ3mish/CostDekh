@@ -20,6 +20,10 @@
 - What: GROQ_MODEL was initially set to groq/compound during setup, which is an agentic model that leaked chain-of-thought reasoning into one output row. Switched to allam-2-7b, a plain instruction-tuned model with no metered cost on this tier, and corrected the cost estimate constants in explanation.py from Llama 3.1 8B pricing to $0.00 to match the model actually used.
 - Why: compound is designed for multi-step tool orchestration, not single-sentence extraction, and produced unpredictable reasoning preambles. allam-2-7b behaved deterministically across all 14 rows with zero cost, which is a better fit for a task that only needs one grounded sentence.
 
+## Section 4.5: Fallback LLM Provider
+- What: Added a FallbackProvider that tries Groq first and falls back to NVIDIA NIM only if Groq's call raises an error, with both providers self-reporting their name so the usage log records which one actually served each call.
+- Why: A single-provider pipeline has one point of failure if that provider has an outage or rate-limits mid-run; a same-shape OpenAI-compatible fallback costs one small class and keeps verdict logic completely unchanged, since the LLM is only ever used for phrasing, never for the decision itself. Verified by temporarily disabling the Groq key and confirming NVIDIA NIM served the calls without any other behavior change.
+
 ## Section 5: Output Formatting + Reproducibility Check
 - What: Reshaped internal pipeline columns into the exact sample_output_format_v2.csv contract, then ran the entire pipeline three full times end-to-end and diffed every graded column except free-text reason across all three runs.
 - Why: The brief grades reproducibility on flags and numbers, explicitly allowing explanation wording to vary, so the diff excludes reason by design rather than by oversight. Running the actual pipeline as subprocesses three times is a stronger proof than reasoning about determinism from the code alone.

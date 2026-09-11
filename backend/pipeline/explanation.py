@@ -5,9 +5,9 @@ import pandas as pd
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 try:
-    from backend.pipeline.llm_provider import LLMProvider, GroqProvider
+    from backend.pipeline.llm_provider import LLMProvider, GroqProvider, NvidiaNimProvider, FallbackProvider
 except ImportError:
-    from llm_provider import LLMProvider, GroqProvider
+    from llm_provider import LLMProvider, GroqProvider, NvidiaNimProvider, FallbackProvider
 
 
 def build_prompt(note_row: dict, route: str, week_of: str, is_rejection: bool) -> str:
@@ -30,6 +30,7 @@ def get_verdict_and_reason(row: dict, notes_lookup: dict, provider: LLMProvider,
         usage_log.append({
             "route": row["route"],
             "week_of": row["week_of"],
+            "provider": resp.get("provider", "groq"),
             "input_tokens": resp["input_tokens"],
             "output_tokens": resp["output_tokens"]
         })
@@ -45,6 +46,7 @@ def get_verdict_and_reason(row: dict, notes_lookup: dict, provider: LLMProvider,
         usage_log.append({
             "route": row["route"],
             "week_of": row["week_of"],
+            "provider": resp.get("provider", "groq"),
             "input_tokens": resp["input_tokens"],
             "output_tokens": resp["output_tokens"]
         })
@@ -72,7 +74,7 @@ if __name__ == '__main__':
         }
         for _, row in notes_df.iterrows()
     }
-    provider = GroqProvider()
+    provider = FallbackProvider([GroqProvider(), NvidiaNimProvider()])
     usage_log = []
     results = []
     for _, row in candidates_df.iterrows():
@@ -88,7 +90,7 @@ if __name__ == '__main__':
     merged_df['matched_note_id'] = merged_df['matched_note_id'].fillna('')
     merged_df.to_csv('output/explained_weeks.csv', index=False)
 
-    usage_df = pd.DataFrame(usage_log, columns=['route', 'week_of', 'input_tokens', 'output_tokens'])
+    usage_df = pd.DataFrame(usage_log, columns=['route', 'week_of', 'provider', 'input_tokens', 'output_tokens'])
     usage_df.to_csv('output/llm_usage_log.csv', index=False)
 
     total_input = int(usage_df['input_tokens'].sum()) if not usage_df.empty else 0
